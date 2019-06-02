@@ -1,5 +1,7 @@
+import { conversationController } from '../container';
+
 export const resolvers = {
   Query: {
-    hello: () => 'world'
+    conversations: () => conversationController.getUserConversations('any')
   }
 };
