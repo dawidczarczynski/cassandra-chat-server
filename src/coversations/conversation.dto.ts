@@ -1,8 +1,8 @@
 import { User } from '../shared/user.model';
 import { Message } from '../shared/message.model';
 
-export interface Conversation {
+export interface ConversationDto {
   id: string;
-  users: [User, User];
-  messages: Message[];
+  user: User;
+  messages: Message[]
 }

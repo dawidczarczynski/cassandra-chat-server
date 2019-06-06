@@ -4,6 +4,7 @@ export const typeDefs = gql`
   type Message {
     text: String
     date: String
+    from: User
   }
 
   type User {
@@ -15,10 +16,10 @@ export const typeDefs = gql`
   type Conversation {
     id: String
     user: User
-    lastMessage: Message
+    messages: [Message]
   }
 
   type Query {
-    conversations: [Conversation]
+    conversations(userId: String!): [Conversation]
   }
 `;

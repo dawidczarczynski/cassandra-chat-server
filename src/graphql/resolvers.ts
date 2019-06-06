@@ -2,6 +2,6 @@ import { conversationController } from '../container';
 
 export const resolvers = {
   Query: {
-    conversations: () => conversationController.getUserConversations('any')
+    conversations: (root, args, context) => conversationController.getUserConversations(args.userId)
   }
 };

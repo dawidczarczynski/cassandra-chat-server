@@ -1,22 +1,22 @@
-import { Conversation } from './conversation.model';
+import { ConversationService } from './coversation.service';
+import { ConversationDto } from './conversation.dto';
 
 export class ConversationController {
 
-  getUserConversations(userId: string): Conversation[] {
-    return [
-      {
-        id: 'first-conversation-id',
-        user: {
-          id: 'john-doe-id',
-          avatar: 'assets/avatar.jpg',
-          name: 'John Doe'
-        },
-        lastMessage: {
-          text: 'Last message from first chat with John Doe...',
-          date: new Date()
-        }
-      }
-    ];
+  constructor(private service: ConversationService) {}
+
+  getUserConversations(userId: string): ConversationDto[] {
+    return this.service
+      .getAllConversations(userId, 1)
+      .map(conversation => ({
+        ...conversation,
+        user: conversation.users.find(user => user.id !== userId)
+      }));
+    ;
+  }
+
+  getConvertationMessages(conversationId: string): any {
+    return [];
   }
 
 }
