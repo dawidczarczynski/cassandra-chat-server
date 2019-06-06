@@ -21,5 +21,6 @@ export const typeDefs = gql`
 
   type Query {
     conversations(userId: String!): [Conversation]
+    conversationById(userId: String!, conversationId: String!): Conversation
   }
 `;

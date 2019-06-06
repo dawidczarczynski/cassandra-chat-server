@@ -15,8 +15,12 @@ export class ConversationController {
     ;
   }
 
-  getConvertationMessages(conversationId: string): any {
-    return [];
+  getConversation(userId: string, conversationId: string): ConversationDto {
+    const entity = this.service.getConversationById(conversationId);
+    return {
+      ...entity,
+      user: entity.users.find(user => user.id !== userId)
+    }
   }
 
 }
