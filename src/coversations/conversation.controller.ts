@@ -1,5 +1,6 @@
 import { ConversationService } from './coversation.service';
 import { ConversationDto } from './conversation.dto';
+import { conversationDtoMapper } from './conversation.mapper';
 
 export class ConversationController {
 
@@ -8,19 +9,13 @@ export class ConversationController {
   getUserConversations(userId: string): ConversationDto[] {
     return this.service
       .getAllConversations(userId, 1)
-      .map(conversation => ({
-        ...conversation,
-        user: conversation.users.find(user => user.id !== userId)
-      }));
+      .map(conversation => conversationDtoMapper(conversation, userId));
     ;
   }
 
   getConversation(userId: string, conversationId: string): ConversationDto {
-    const entity = this.service.getConversationById(conversationId);
-    return {
-      ...entity,
-      user: entity.users.find(user => user.id !== userId)
-    }
+    const conversation = this.service.getConversationById(conversationId);
+    return conversationDtoMapper(conversation, userId);
   }
 
 }
