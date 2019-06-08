@@ -23,4 +23,12 @@ export const typeDefs = gql`
     conversations(userId: String!): [Conversation]
     conversationById(userId: String!, conversationId: String!): Conversation
   }
+
+  type Mutation {
+    addMessage(conversationId: String!, userId: String!, message: String!): Message
+  }
+
+  type Subscription {
+    messageAdded(conversationId: String!): Message
+  }
 `;
