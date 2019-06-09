@@ -20,6 +20,7 @@ export const typeDefs = gql`
   }
 
   type Query {
+    users: [User]
     conversations(userId: String!): [Conversation]
     conversationById(userId: String!, conversationId: String!): Conversation
   }

@@ -19,9 +19,11 @@
   "homepage": "https://gitlab.com/dczarczynski/cassandra-chat-server#readme",
   "dependencies": {
     "apollo-server": "^2.6.1",
+    "cassandra-driver": "^4.1.0",
     "graphql": "^14.3.1"
   },
   "devDependencies": {
+    "@types/cassandra-driver": "^4.0.3",
     "typescript": "^3.5.1"
   }
 }
