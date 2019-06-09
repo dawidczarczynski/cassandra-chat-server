@@ -13,4 +13,12 @@ export class ConversationDao {
       .then((result: any) => result.rows);
   }
 
+  getConversationById(conversationId: string): Promise<Conversation> {
+    const query = `SELECT * from conversations WHERE id=${conversationId}`;
+
+    return this.client
+      .execute(query)
+      .then((result: any) => result.rows[0]);
+  }
+
 }

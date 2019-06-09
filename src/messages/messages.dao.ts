@@ -16,16 +16,16 @@ export class MessagesDao {
   saveMessage({ text, date, from }: Message, conversationId: string): Promise<boolean> {
     const query = `
       INSERT INTO
-        messages(id, conversationId, text, date, from)
+        messages(id, conversation_id, text, date, user)
       VALUES (
         uuid(),
         ${conversationId},
-        ${text},
-        ${date},
+        '${text}',
+        '${date}',
         {
-          'id': ${from.id},
-          'name': ${from.name},
-          'avatar': ${from.avatar}
+          'id': '${from.id}',
+          'name': '${from.name}',
+          'avatar': '${from.avatar}'
         }
       )
     `;

@@ -19,7 +19,12 @@ export class MessagesService {
   }
 
   async getConverastionMessages(conversationId: string): Promise<Message[]> {
-    return this.messagesDao.getMessagesByConversationId(conversationId);
+    const messages = await this.messagesDao.getMessagesByConversationId(conversationId);
+    return messages.map(({ text, date, user }: any) => ({
+      text,
+      date,
+      from: user
+    }));
   }
 
   async saveMessage(conversationId: string, message: Message): Promise<Message> {

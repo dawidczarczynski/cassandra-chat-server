@@ -15,20 +15,28 @@ export class ConversationService {
   async getAllConversations(userId: string, messagesLimit: number = 10): Promise<ConversationDto[]> {
     const conversations = await this.conversationDao.getAllUserConversations(userId);
 
-    return Promise.all(conversations.map(async ({ id, users }: Conversation) => {
-      const user = await this.retriveSecondUserData(users, userId);
-      const messages = await this.messagesService.getConverastionMessages(id);
-      return {
-        id,
-        user,
-        messages
-      }
-    })
+    return await Promise.all(conversations.map(
+      (conversation: Conversation) => this.mapConversationModelToDto(userId, conversation))
     )
   }
 
+  async getConversationById(userId: string, conversationId: string): Promise<ConversationDto> {
+    const conversation = await this.conversationDao.getConversationById(conversationId);
+    return await this.mapConversationModelToDto(userId, conversation);
+  }
+
+  private async mapConversationModelToDto(userId: string, { id, users }: Conversation): Promise<ConversationDto> {
+    const user = await this.retriveSecondUserData(users, userId);
+    const messages = await this.messagesService.getConverastionMessages(id);
+    return {
+      id,
+      user,
+      messages
+    };
+  }
+
   private async retriveSecondUserData(users: [string, string], currentUserId: string): Promise<User> {
-    const userToFetchId = users.find(id => id !== currentUserId)
+    const userToFetchId = users.find(id => id !== currentUserId);
     return await this.usersService.getUserById(userToFetchId);
   }
 
