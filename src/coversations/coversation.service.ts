@@ -1,18 +1,37 @@
 import { Conversation } from './conversation.model';
-import { conversations } from './mocks';
+import { ConversationDao } from './conversation.dao';
+import { UsersService } from '../users/users.service';
+import { ConversationDto } from './conversation.dto';
+import { User } from '../shared/user.model';
+import { MessagesService } from '../messages/messages.service';
 
 export class ConversationService {
 
-  getAllConversations(userId: string, messagesLimit: number = 10): Conversation[] {
-    return conversations
-      .filter(conversation => !!conversation.users.find(user => user.id === userId))
-      .map(convsersation => this.limitConversationMessages(convsersation, messagesLimit));
+  constructor(
+    private usersService: UsersService,
+    private messagesService: MessagesService,
+    private conversationDao: ConversationDao) {}
+
+  async getAllConversations(userId: string, messagesLimit: number = 10): Promise<ConversationDto[]> {
+    const conversations = await this.conversationDao.getAllUserConversations(userId);
+
+    return Promise.all(conversations.map(async ({ id, users }: Conversation) => {
+      const user = await this.retriveSecondUserData(users, userId);
+      const messages = await this.messagesService.getConverastionMessages(id);
+      return {
+        id,
+        user,
+        messages
+      }
+    })
+    )
   }
 
-  getConversationById(conversationId: string, messagesLimit: number = 10): Conversation {
-    const conversation = conversations.find(({ id }: Conversation) => id === conversationId )
-    return this.limitConversationMessages(conversation, messagesLimit);
+  private async retriveSecondUserData(users: [string, string], currentUserId: string): Promise<User> {
+    const userToFetchId = users.find(id => id !== currentUserId)
+    return await this.usersService.getUserById(userToFetchId);
   }
+
 
   private limitConversationMessages(conversation: Conversation, limit: number) {
     return ({

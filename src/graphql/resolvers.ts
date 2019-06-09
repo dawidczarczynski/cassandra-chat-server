@@ -5,7 +5,7 @@ import { pubsub, conversationController, messagesController, usersController } f
 export const resolvers = {
   Query: {
     conversations: (root, args) => conversationController.getUserConversations(args.userId),
-    conversationById: (root, args) => conversationController.getConversation(args.userId, args.conversationId),
+    // conversationById: (root, args) => conversationController.getConversation(args.userId, args.conversationId),
     users: () => usersController.getAllUsers()
   },
   Mutation: {

@@ -13,4 +13,12 @@ export class UsersDao {
       .then((result: any) => result.rows);
   }
 
+  async getUserById(userId: string): Promise<User> {
+    const query = `SELECT * FROM users WHERE id=${userId}`;
+
+    return await this.client
+      .execute(query)
+      .then((result: any) => result.rows[0]);
+  }
+
 }

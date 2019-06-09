@@ -1,23 +1,19 @@
 import { PubSub } from 'apollo-server';
-import { UsersService } from '../users/users.service';
 import { Message } from '../shared/message.model';
+import { MessagesService } from './messages.service';
 
 export class MessagesController {
 
   constructor(
     private pubsub: PubSub,
-    private usersService: UsersService
+    private messagesService: MessagesService
   ) {}
 
-  addMessage(conversationId: string, userId: string, text: string): Message {
-    const from = this.usersService.getUserById(userId);
-    const messageAdded = {
-      text,
-      date: new Date().toISOString(),
-      from
-    };
+  async addMessage(conversationId: string, userId: string, text: string): Promise<Message> {
+    const messageAdded = await this.messagesService.constructMessage(text, userId);
 
-    this.pubsub.publish('messageAdded', { messageAdded, conversationId })
+    this.pubsub.publish('messageAdded', { messageAdded, conversationId });
+    await this.messagesService.saveMessage(conversationId, messageAdded);
 
     return messageAdded;
   }
